@@ -23,7 +23,7 @@ echo "
 
 ## Startup
 [[ -z "$L4D2_SERVER_PORT" ]] && L4D2_SERVER_PORT="27015"
-[[ -z "$L4D2_SERVER_MAXPLAYERS" ]] && L4D2_SERVER_MAXPLAYERS="24"
+[[ -z "$L4D2_SERVER_MAXPLAYERS" ]] && L4D2_SERVER_MAXPLAYERS="8"
 [[ -z "$L4D2_SERVER_MAP" ]] && L4D2_SERVER_MAP="c1m1_hotel"
 
 ## Config
