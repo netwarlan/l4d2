@@ -10,7 +10,6 @@ docker run -d \
 -p 27015:27015/udp \
 -p 27015:27015/tcp \
 -e L4D2_SERVER_HOSTNAME="DOCKER L4D2" \
--e L4D2_SERVER_MAXPLAYERS="8" \
 netwarlan/l4d2
 ```
 

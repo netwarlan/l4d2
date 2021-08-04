@@ -69,4 +69,4 @@ echo "
   Max Players: $L4D2_SERVER_MAXPLAYERS
   Map: $L4D2_SERVER_MAP
 "
-$GAME_DIR/srcds_run -game left4dead2 -console -usercon +port $L4D2_SERVER_PORT +maxplayers $L4D2_SERVER_MAXPLAYERS +map $L4D2_SERVER_MAP +sv_lan 1 -secure
+$GAME_DIR/srcds_run -game left4dead2 -console -usercon +port $L4D2_SERVER_PORT +maxplayers $L4D2_SERVER_MAXPLAYERS +map $L4D2_SERVER_MAP +sv_lan 1
