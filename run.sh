@@ -14,7 +14,7 @@ echo "
 ╠═══════════════════════════════════════════════╣
 ║ Thanks for using our DOCKER image! Should you ║
 ║ have issues, please reach out or create a     ║
-║ a github issue. Thanks!                       ║
+║ github issue. Thanks!                         ║
 ║                                               ║
 ║ For more information:                         ║
 ║ https://github.com/netwarlan                  ║
@@ -32,7 +32,7 @@ echo "
 [[ ! -z "$L4D2_SERVER_RCONPW" ]] && L4D2_SERVER_RCONPW="rcon_password $L4D2_SERVER_RCONPW"
 
 cat <<EOF >$GAME_DIR/left4dead2/cfg/server.cfg
-hostname $L4D2_SERVER_HOSTNAME
+hostname "$L4D2_SERVER_HOSTNAME"
 $L4D2_SERVER_PW
 $L4D2_SERVER_RCONPW
 EOF
@@ -64,5 +64,9 @@ echo "
 ╔═══════════════════════════════════════════════╗
 ║ Starting SERVER                               ║
 ╚═══════════════════════════════════════════════╝
+  Hostname: $L4D2_SERVER_HOSTNAME
+  Port: $L4D2_SERVER_PORT
+  Max Players: $L4D2_SERVER_MAXPLAYERS
+  Map: $L4D2_SERVER_MAP
 "
 $GAME_DIR/srcds_run -game left4dead2 -console -usercon +port $L4D2_SERVER_PORT +maxplayers $L4D2_SERVER_MAXPLAYERS +map $L4D2_SERVER_MAP +sv_lan 1 -secure
