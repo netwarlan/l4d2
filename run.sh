@@ -91,7 +91,7 @@ echo "
 ║ Building server config                        ║
 ╚═══════════════════════════════════════════════╝
 "
-cat <<EOF >> $GAME_DIR/left4dead2/cfg/server.cfg
+cat <<EOF > $GAME_DIR/left4dead2/cfg/server.cfg
 // Values passed from Docker environment
 $L4D2_SERVER_PW
 $L4D2_SERVER_RCONPW
