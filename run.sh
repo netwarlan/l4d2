@@ -29,8 +29,7 @@ echo "
 [[ -z "$L4D2_SERVER_MAP" ]] && L4D2_SERVER_MAP="c1m1_hotel"
 [[ -z "$L4D2_SVLAN" ]] && L4D2_SVLAN="0"
 [[ -z "$L4D2_SERVER_HOSTNAME" ]] && L4D2_SERVER_HOSTNAME="L4D2 Server"
-[[ ! -z "$L4D2_SERVER_PW" ]] && L4D2_SERVER_PW="sv_password $L4D2_SERVER_PW"
-[[ ! -z "$L4D2_SERVER_RCONPW" ]] && L4D2_SERVER_RCONPW="rcon_password $L4D2_SERVER_RCONPW"
+[[ -z "$L4D2_SERVER_RCONPW" ]] && L4D2_SERVER_RCONPW=""
 [[ -z "$L4D2_SERVER_ENABLE_REMOTE_CFG" ]] && L4D2_SERVER_ENABLE_REMOTE_CFG=false
 [[ -z "$L4D2_SERVER_UPDATE_ON_START" ]] && L4D2_SERVER_UPDATE_ON_START=true
 [[ -z "$L4D2_SERVER_VALIDATE_ON_START" ]] && L4D2_SERVER_VALIDATE_ON_START=false
@@ -84,23 +83,6 @@ fi
 
 
 
-## Build server config
-## ==============================================
-echo "
-╔═══════════════════════════════════════════════╗
-║ Building server config                        ║
-╚═══════════════════════════════════════════════╝
-"
-cat <<EOF > $GAME_DIR/left4dead2/cfg/server.cfg
-// Values passed from Docker environment
-$L4D2_SERVER_PW
-$L4D2_SERVER_RCONPW
-EOF
-
-
-
-
-
 ## Run
 ## ==============================================
 echo "
@@ -113,4 +95,4 @@ echo "
   Map: $L4D2_SERVER_MAP
 "
 
-$GAME_DIR/srcds_run -game left4dead2 -console -usercon +hostname \"${L4D2_SERVER_HOSTNAME}\" +port $L4D2_SERVER_PORT +maxplayers $L4D2_SERVER_MAXPLAYERS +map $L4D2_SERVER_MAP +sv_lan $L4D2_SVLAN
+$GAME_DIR/srcds_run -game left4dead2 -console -usercon +hostname \"${L4D2_SERVER_HOSTNAME}\" +port $L4D2_SERVER_PORT +maxplayers $L4D2_SERVER_MAXPLAYERS +map $L4D2_SERVER_MAP +sv_lan $L4D2_SVLAN +rcon_password \"${L4D2_SERVER_RCONPW}\"
