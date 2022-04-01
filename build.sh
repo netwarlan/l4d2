@@ -1,3 +1,3 @@
 #!/bin/zsh
 
-docker build -t l4d2 .
+docker build -t netwarlan/l4d2 .

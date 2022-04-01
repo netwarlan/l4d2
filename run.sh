@@ -52,8 +52,8 @@ echo "
   fi
 
   $STEAMCMD_DIR/steamcmd.sh \
-  +login $STEAMCMD_USER $STEAMCMD_PASSWORD $STEAMCMD_AUTH_CODE \
   +force_install_dir $GAME_DIR \
+  +login $STEAMCMD_USER $STEAMCMD_PASSWORD $STEAMCMD_AUTH_CODE \
   +app_update $STEAMCMD_APP $VALIDATE_FLAG \
   +quit
 
@@ -82,6 +82,18 @@ fi
 
 
 
+## Print Variables
+## ==============================================
+echo "
+╔═══════════════════════════════════════════════╗
+║ Server set with provided values               ║
+╚═══════════════════════════════════════════════╝
+"
+printenv | grep L4D2
+
+
+
+
 
 ## Run
 ## ==============================================
@@ -89,10 +101,6 @@ echo "
 ╔═══════════════════════════════════════════════╗
 ║ Starting server                               ║
 ╚═══════════════════════════════════════════════╝
-  Hostname: $L4D2_SERVER_HOSTNAME
-  Port: $L4D2_SERVER_PORT
-  Max Players: $L4D2_SERVER_MAXPLAYERS
-  Map: $L4D2_SERVER_MAP
 "
 
 $GAME_DIR/srcds_run -game left4dead2 -console -usercon +hostname \"${L4D2_SERVER_HOSTNAME}\" +port $L4D2_SERVER_PORT +maxplayers $L4D2_SERVER_MAXPLAYERS +map $L4D2_SERVER_MAP +sv_lan $L4D2_SVLAN +rcon_password \"${L4D2_SERVER_RCONPW}\"
