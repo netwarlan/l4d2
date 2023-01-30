@@ -10,7 +10,7 @@ docker run -d \
 -p 27015:27015/udp \
 -p 27015:27015/tcp \
 -e L4D2_SERVER_HOSTNAME="DOCKER L4D2" \
-netwarlan/l4d2
+ghcr.io/netwarlan/l4d2
 ```
 
 ### Environment Variables
