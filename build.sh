@@ -1,3 +1,3 @@
 #!/bin/zsh
 
-docker build -t netwarlan/l4d2 .
+docker build -t ghcr.io/netwarlan/l4d2 .
