@@ -1,5 +1,4 @@
-# Left 4 Dead 2
-              
+# Left 4 Dead 2            
 The following repository contains the source files for building a Left 4 Dead 2 server.
 
 

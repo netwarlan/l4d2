@@ -103,4 +103,10 @@ echo "
 ╚═══════════════════════════════════════════════╝
 "
 
-$GAME_DIR/srcds_run -game left4dead2 -console -usercon +hostname \"${L4D2_SERVER_HOSTNAME}\" +port $L4D2_SERVER_PORT +maxplayers $L4D2_SERVER_MAXPLAYERS +map $L4D2_SERVER_MAP +sv_lan $L4D2_SVLAN +rcon_password \"${L4D2_SERVER_RCONPW}\"
+$GAME_DIR/srcds_run -game left4dead2 -console -usercon \
++hostname \"${L4D2_SERVER_HOSTNAME}\" \
++port $L4D2_SERVER_PORT \
++maxplayers $L4D2_SERVER_MAXPLAYERS \
++map $L4D2_SERVER_MAP \
++sv_lan $L4D2_SVLAN \
++rcon_password \"${L4D2_SERVER_RCONPW}\"
