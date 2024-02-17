@@ -18,8 +18,7 @@ echo "
 ║                                               ║
 ║ For more information:                         ║
 ║ github.com/netwarlan                          ║
-╚═══════════════════════════════════════════════╝
-"
+╚═══════════════════════════════════════════════╝"
 
 
 ## Set default values if none were provided
@@ -43,8 +42,7 @@ if [[ "$L4D2_SERVER_UPDATE_ON_START" = true ]] || [[ "$L4D2_SERVER_VALIDATE_ON_S
 echo "
 ╔═══════════════════════════════════════════════╗
 ║ Checking for updates                          ║
-╚═══════════════════════════════════════════════╝
-"
+╚═══════════════════════════════════════════════╝"
   if [[ "$L4D2_SERVER_VALIDATE_ON_START" = true ]]; then
     VALIDATE_FLAG='validate'
   else 
@@ -69,8 +67,7 @@ if [[ "$L4D2_SERVER_ENABLE_REMOTE_CFG" = true ]]; then
 echo "
 ╔═══════════════════════════════════════════════╗
 ║ Downloading remote config                     ║
-╚═══════════════════════════════════════════════╝
-"
+╚═══════════════════════════════════════════════╝"
   if [[ -z "$L4D2_SERVER_REMOTE_CFG" ]]; then
     echo "  Remote config enabled, but no URL provided..."
   else
@@ -87,8 +84,7 @@ fi
 echo "
 ╔═══════════════════════════════════════════════╗
 ║ Server set with provided values               ║
-╚═══════════════════════════════════════════════╝
-"
+╚═══════════════════════════════════════════════╝"
 printenv | grep L4D2
 
 
@@ -100,8 +96,7 @@ printenv | grep L4D2
 echo "
 ╔═══════════════════════════════════════════════╗
 ║ Starting server                               ║
-╚═══════════════════════════════════════════════╝
-"
+╚═══════════════════════════════════════════════╝"
 
 $GAME_DIR/srcds_run -game left4dead2 -console -usercon \
 +hostname \"${L4D2_SERVER_HOSTNAME}\" \
