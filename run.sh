@@ -28,12 +28,13 @@ echo "
 [[ -z "$L4D2_SERVER_MAP" ]] && L4D2_SERVER_MAP="c1m1_hotel"
 [[ -z "$L4D2_SVLAN" ]] && L4D2_SVLAN="0"
 [[ -z "$L4D2_SERVER_HOSTNAME" ]] && L4D2_SERVER_HOSTNAME="L4D2 Server"
-[[ -z "$L4D2_SERVER_RCONPW" ]] && L4D2_SERVER_RCONPW=""
-[[ -z "$L4D2_SERVER_ENABLE_REMOTE_CFG" ]] && L4D2_SERVER_ENABLE_REMOTE_CFG=false
+[[ ! -z "$L4D2_SERVER_PW" ]] && L4D2_SERVER_PW="sv_password $L4D2_SERVER_PW"
+[[ ! -z "$L4D2_SERVER_RCONPW" ]] && L4D2_SERVER_RCONPW="rcon_password $L4D2_SERVER_RCONPW"
+[[ -z "$L4D2_SERVER_REMOTE_CFG" ]] && L4D2_SERVER_REMOTE_CFG=""
 [[ -z "$L4D2_SERVER_UPDATE_ON_START" ]] && L4D2_SERVER_UPDATE_ON_START=true
 [[ -z "$L4D2_SERVER_VALIDATE_ON_START" ]] && L4D2_SERVER_VALIDATE_ON_START=false
-
-
+[[ -z "$L4D2_SERVER_ENABLE_PROPHUNT" ]] && L4D2_SERVER_ENABLE_PROPHUNT=false
+[[ -z "$L4D2_SERVER_CONFIG" ]] && L4D2_SERVER_CONFIG="server.cfg"
 
 
 ## Update on startup
@@ -43,10 +44,9 @@ echo "
 ╔═══════════════════════════════════════════════╗
 ║ Checking for updates                          ║
 ╚═══════════════════════════════════════════════╝"
+  VALIDATE_FLAG=''
   if [[ "$L4D2_SERVER_VALIDATE_ON_START" = true ]]; then
     VALIDATE_FLAG='validate'
-  else 
-    VALIDATE_FLAG=''
   fi
 
   $STEAMCMD_DIR/steamcmd.sh \
@@ -54,27 +54,42 @@ echo "
   +login $STEAMCMD_USER $STEAMCMD_PASSWORD $STEAMCMD_AUTH_CODE \
   +app_update $STEAMCMD_APP $VALIDATE_FLAG \
   +quit
-
 fi
 
+
+
+
+## Build server config
+## ==============================================
+echo "
+╔═══════════════════════════════════════════════╗
+║ Building server config                        ║
+╚═══════════════════════════════════════════════╝"
+cat <<EOF > ${GAME_DIR}/left4dead2/cfg/$L4D2_SERVER_CONFIG
+// Values passed from Docker environment
+$L4D2_SERVER_PW
+$L4D2_SERVER_RCONPW
+host_name_store 1
+host_info_show 1
+host_players_show 2
+EOF
 
 
 
 
 ## Download config if needed
 ## ==============================================
-if [[ "$L4D2_SERVER_ENABLE_REMOTE_CFG" = true ]]; then
+if [[ ! -z "$L4D2_SERVER_REMOTE_CFG" ]]; then
 echo "
 ╔═══════════════════════════════════════════════╗
 ║ Downloading remote config                     ║
 ╚═══════════════════════════════════════════════╝"
-  if [[ -z "$L4D2_SERVER_REMOTE_CFG" ]]; then
-    echo "  Remote config enabled, but no URL provided..."
-  else
-    echo "  Downloading config..."
-    wget -q $L4D2_SERVER_REMOTE_CFG -O $GAME_DIR/left4dead2/cfg/server.cfg
-  fi
-
+  echo "  Downloading config..."
+  FILENAME=$(basename "$L4D2_SERVER_REMOTE_CFG")
+  curl --silent -O --output-dir $GAME_DIR/left4dead2/cfg/ $L4D2_SERVER_REMOTE_CFG
+  chmod 770 $GAME_DIR/left4dead2/cfg/$FILENAME
+  echo "  Setting $FILENAME as our server exec"
+  L4D2_SERVER_CONFIG=$FILENAME
 fi
 
 
@@ -98,10 +113,11 @@ echo "
 ║ Starting server                               ║
 ╚═══════════════════════════════════════════════╝"
 
+## Escaped double quotes help to ensure hostnames with spaces are kept intact
 $GAME_DIR/srcds_run -game left4dead2 -console -usercon \
 +hostname \"${L4D2_SERVER_HOSTNAME}\" \
++exec $L4D2_SERVER_CONFIG \
 +port $L4D2_SERVER_PORT \
 +maxplayers $L4D2_SERVER_MAXPLAYERS \
 +map $L4D2_SERVER_MAP \
-+sv_lan $L4D2_SVLAN \
-+rcon_password \"${L4D2_SERVER_RCONPW}\"
++sv_lan $L4D2_SVLAN
