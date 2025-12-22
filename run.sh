@@ -62,6 +62,11 @@ echo "
     VALIDATE_FLAG='validate'
   fi
 
+  ## Workaround for SteamCMD platform detection bug
+  ## https://github.com/ValveSoftware/steam-for-linux/issues/11522
+  $STEAMCMD_DIR/steamcmd.sh +force_install_dir $GAME_DIR +@sSteamCmdForcePlatformType windows +quit
+  $STEAMCMD_DIR/steamcmd.sh +force_install_dir $GAME_DIR +@sSteamCmdForcePlatformType linux +quit
+
   $STEAMCMD_DIR/steamcmd.sh \
   +force_install_dir $GAME_DIR \
   +login $STEAMCMD_USER $STEAMCMD_PASSWORD $STEAMCMD_AUTH_CODE \
