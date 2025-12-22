@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 echo "
 
@@ -23,18 +24,30 @@ echo "
 
 ## Set default values if none were provided
 ## ==============================================
-[[ -z "$L4D2_SERVER_PORT" ]] && L4D2_SERVER_PORT="27015"
-[[ -z "$L4D2_SERVER_MAXPLAYERS" ]] && L4D2_SERVER_MAXPLAYERS="4"
-[[ -z "$L4D2_SERVER_MAP" ]] && L4D2_SERVER_MAP="c1m1_hotel"
-[[ -z "$L4D2_SVLAN" ]] && L4D2_SVLAN="0"
-[[ -z "$L4D2_SERVER_HOSTNAME" ]] && L4D2_SERVER_HOSTNAME="L4D2 Server"
-[[ ! -z "$L4D2_SERVER_PW" ]] && L4D2_SERVER_PW="sv_password $L4D2_SERVER_PW"
-[[ ! -z "$L4D2_SERVER_RCONPW" ]] && L4D2_SERVER_RCONPW="rcon_password $L4D2_SERVER_RCONPW"
-[[ -z "$L4D2_SERVER_REMOTE_CFG" ]] && L4D2_SERVER_REMOTE_CFG=""
-[[ -z "$L4D2_SERVER_UPDATE_ON_START" ]] && L4D2_SERVER_UPDATE_ON_START=true
-[[ -z "$L4D2_SERVER_VALIDATE_ON_START" ]] && L4D2_SERVER_VALIDATE_ON_START=false
-[[ -z "$L4D2_SERVER_ENABLE_PROPHUNT" ]] && L4D2_SERVER_ENABLE_PROPHUNT=false
-[[ -z "$L4D2_SERVER_CONFIG" ]] && L4D2_SERVER_CONFIG="server.cfg"
+L4D2_SERVER_PORT="${L4D2_SERVER_PORT:-27015}"
+L4D2_SERVER_MAXPLAYERS="${L4D2_SERVER_MAXPLAYERS:-4}"
+L4D2_SERVER_MAP="${L4D2_SERVER_MAP:-c1m1_hotel}"
+L4D2_SVLAN="${L4D2_SVLAN:-0}"
+L4D2_SERVER_HOSTNAME="${L4D2_SERVER_HOSTNAME:-L4D2 Server}"
+L4D2_SERVER_REMOTE_CFG="${L4D2_SERVER_REMOTE_CFG:-}"
+L4D2_SERVER_UPDATE_ON_START="${L4D2_SERVER_UPDATE_ON_START:-true}"
+L4D2_SERVER_VALIDATE_ON_START="${L4D2_SERVER_VALIDATE_ON_START:-false}"
+L4D2_SERVER_ENABLE_PROPHUNT="${L4D2_SERVER_ENABLE_PROPHUNT:-false}"
+L4D2_SERVER_CONFIG="${L4D2_SERVER_CONFIG:-server.cfg}"
+
+## Format password variables for config file
+[[ -n "$L4D2_SERVER_PW" ]] && L4D2_SERVER_PW="sv_password $L4D2_SERVER_PW"
+[[ -n "$L4D2_SERVER_RCONPW" ]] && L4D2_SERVER_RCONPW="rcon_password $L4D2_SERVER_RCONPW"
+
+## Validate numeric inputs
+if [[ ! "$L4D2_SERVER_PORT" =~ ^[0-9]+$ ]]; then
+  echo "Error: L4D2_SERVER_PORT must be a valid number"
+  exit 1
+fi
+if [[ ! "$L4D2_SERVER_MAXPLAYERS" =~ ^[0-9]+$ ]]; then
+  echo "Error: L4D2_SERVER_MAXPLAYERS must be a valid number"
+  exit 1
+fi
 
 
 ## Update on startup
@@ -79,7 +92,7 @@ EOF
 
 ## Download config if needed
 ## ==============================================
-if [[ ! -z "$L4D2_SERVER_REMOTE_CFG" ]]; then
+if [[ -n "$L4D2_SERVER_REMOTE_CFG" ]]; then
 echo "
 ╔═══════════════════════════════════════════════╗
 ║ Downloading remote config                     ║

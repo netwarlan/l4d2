@@ -1,8 +1,13 @@
-# Left 4 Dead 2            
+# Left 4 Dead 2
+
+[![Docker Build](https://img.shields.io/github/actions/workflow/status/netwarlan/l4d2/build.yml?label=build)](https://github.com/netwarlan/l4d2/actions)
+[![License](https://img.shields.io/github/license/netwarlan/l4d2)](LICENSE)
+
 The following repository contains the source files for building a Left 4 Dead 2 server.
 
 
-### Running
+## Running
+
 To run the container, issue the following example command:
 ```
 docker run -d \
@@ -12,7 +17,8 @@ docker run -d \
 ghcr.io/netwarlan/l4d2
 ```
 
-### SteamCMD Download/Install Issues
+## SteamCMD Download/Install Issues
+
 Starting 11/27/2024, Valve removed L4D2 from the Anonymous Dedicated Server distribution list. More info here: https://github.com/ValveSoftware/steam-for-linux/issues/11522
 
 For this to work going forward, a username and password will need to be provided.
@@ -27,7 +33,8 @@ STEAMCMD_AUTH_CODE="ABC123"
 * If you have MFA enabled on the account, you may also need to manually "Approve" the login request
 
 
-### Environment Variables
+## Environment Variables
+
 We can make dynamic changes to our L4D2 containers by adjusting some of the environment variables passed to our image.
 Below are the ones currently supported and their (defaults):
 
@@ -43,3 +50,35 @@ L4D2_SERVER_UPDATE_ON_START | true
 L4D2_SERVER_VALIDATE_ON_START | false
 L4D2_SERVER_ENABLE_REMOTE_CFG | false
 L4D2_SERVER_REMOTE_CFG | No url set
+
+
+## Health Check
+
+The container includes a built-in health check that monitors the game server process. Docker will automatically report the container as unhealthy if the game server stops running.
+
+Check container health status:
+```bash
+docker inspect --format='{{.State.Health.Status}}' <container_name>
+```
+
+
+## Troubleshooting
+
+### Server won't start
+- Verify Steam credentials are correct
+- Check if MFA approval is needed on your Steam account
+- Review container logs: `docker logs <container_name>`
+
+### Slow startup
+- First run downloads the full game (~15GB)
+- Set `L4D2_SERVER_UPDATE_ON_START=false` to skip update checks after initial setup
+
+### Players can't connect
+- Ensure ports 27015 TCP/UDP are forwarded correctly
+- Check `L4D2_SVLAN` is set to `0` for internet play
+- Verify firewall rules allow traffic on port 27015
+
+
+## License
+
+This project is open source. See the repository for license details.
