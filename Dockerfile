@@ -24,13 +24,14 @@ RUN dpkg --add-architecture i386 \
         lib32ncurses-dev \
         lib32stdc++6 \
         lib32z1 \
-        libtinfo6 \
         libc6 \
-        zlib1g \
-        libsdl2-2.0-0 \
         libcurl3t64-gnutls:i386 \
+        libncurses6 \
+        libsdl2-2.0-0 \
+        libtinfo6 \
+        net-tools \
         unzip \
-        net-tools\
+        zlib1g \
     && apt clean \
     && rm -rf /var/tmp/* /var/lib/apt/lists/* /tmp/* \
     \
@@ -65,7 +66,7 @@ COPY run.sh $APP_DIR/run.sh
 ## Set working directory
 WORKDIR $APP_DIR
 
-## Health check to monitor the game server process
+## Health check to monitor srcds process
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
     CMD pgrep -f srcds_linux || exit 1
 
