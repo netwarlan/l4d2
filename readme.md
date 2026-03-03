@@ -1,7 +1,8 @@
 # Left 4 Dead 2
 
-[![Docker Build](https://img.shields.io/github/actions/workflow/status/netwarlan/l4d2/build.yml?label=build)](https://github.com/netwarlan/l4d2/actions)
-[![License](https://img.shields.io/github/license/netwarlan/l4d2)](LICENSE)
+[![Build](https://img.shields.io/github/actions/workflow/status/netwarlan/l4d2/build.yml)](https://github.com/netwarlan/l4d2/actions)
+[![Release](https://img.shields.io/github/v/release/netwarlan/l4d2)](https://github.com/netwarlan/l4d2/releases)
+[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/QtqKW9xvzK)
 
 The following repository contains the source files for building a Left 4 Dead 2 server.
 
