@@ -32,6 +32,8 @@ L4D2_SERVER_HOSTNAME="${L4D2_SERVER_HOSTNAME:-L4D2 Server}"
 L4D2_SERVER_REMOTE_CFG="${L4D2_SERVER_REMOTE_CFG:-}"
 L4D2_SERVER_UPDATE_ON_START="${L4D2_SERVER_UPDATE_ON_START:-true}"
 L4D2_SERVER_VALIDATE_ON_START="${L4D2_SERVER_VALIDATE_ON_START:-false}"
+L4D2_SERVER_UPDATE_ONLY_THEN_STOP="${L4D2_SERVER_UPDATE_ONLY_THEN_STOP:-false}"
+L4D2_SERVER_VALIDATE_ONLY_THEN_STOP="${L4D2_SERVER_VALIDATE_ONLY_THEN_STOP:-false}"
 L4D2_SERVER_CONFIG="${L4D2_SERVER_CONFIG:-server.cfg}"
 
 ## Format password variables for config file
@@ -49,15 +51,21 @@ if [[ ! "$L4D2_SERVER_MAXPLAYERS" =~ ^[0-9]+$ ]]; then
 fi
 
 
-## Update on startup
+## Download game files only (without starting server)
 ## ==============================================
-if [[ "$L4D2_SERVER_UPDATE_ON_START" = true ]] || [[ "$L4D2_SERVER_VALIDATE_ON_START" = true ]]; then
+if [[ "$L4D2_SERVER_UPDATE_ONLY_THEN_STOP" = true ]] || [[ "$L4D2_SERVER_VALIDATE_ONLY_THEN_STOP" = true ]]; then
 echo "
 ╔═══════════════════════════════════════════════╗
-║ Checking for updates                          ║
+║ Downloading game files only                   ║
 ╚═══════════════════════════════════════════════╝"
+  if [[ "$L4D2_SERVER_VALIDATE_ONLY_THEN_STOP" = true ]]; then
+    VALIDATE_FLAG='validate'
+  else
+    VALIDATE_FLAG=''
+  fi
+
   ## Workaround: https://github.com/ValveSoftware/steam-for-linux/issues/11522
-  ## Download with windows platform, then validate with linux to get correct binaries
+  ## Download with windows platform, then re-run with linux to get correct binaries
   "$STEAMCMD_DIR/steamcmd.sh" \
   +@sSteamCmdForcePlatformType windows \
   +force_install_dir "$GAME_DIR" \
@@ -69,7 +77,44 @@ echo "
   +@sSteamCmdForcePlatformType linux \
   +force_install_dir "$GAME_DIR" \
   +login "$STEAMCMD_USER" "$STEAMCMD_PASSWORD" "$STEAMCMD_AUTH_CODE" \
-  +app_update "$STEAMCMD_APP" validate \
+  +app_update "$STEAMCMD_APP" $VALIDATE_FLAG \
+  +quit
+
+echo "
+╔═══════════════════════════════════════════════╗
+║ Game files downloaded. Stopping container.    ║
+╚═══════════════════════════════════════════════╝"
+  exit 0
+fi
+
+
+## Update on startup
+## ==============================================
+if [[ "$L4D2_SERVER_UPDATE_ON_START" = true ]] || [[ "$L4D2_SERVER_VALIDATE_ON_START" = true ]]; then
+echo "
+╔═══════════════════════════════════════════════╗
+║ Checking for updates                          ║
+╚═══════════════════════════════════════════════╝"
+  if [[ "$L4D2_SERVER_VALIDATE_ON_START" = true ]]; then
+    VALIDATE_FLAG='validate'
+  else
+    VALIDATE_FLAG=''
+  fi
+
+  ## Workaround: https://github.com/ValveSoftware/steam-for-linux/issues/11522
+  ## Download with windows platform, then re-run with linux to get correct binaries
+  "$STEAMCMD_DIR/steamcmd.sh" \
+  +@sSteamCmdForcePlatformType windows \
+  +force_install_dir "$GAME_DIR" \
+  +login "$STEAMCMD_USER" "$STEAMCMD_PASSWORD" "$STEAMCMD_AUTH_CODE" \
+  +app_update "$STEAMCMD_APP" \
+  +quit
+
+  "$STEAMCMD_DIR/steamcmd.sh" \
+  +@sSteamCmdForcePlatformType linux \
+  +force_install_dir "$GAME_DIR" \
+  +login "$STEAMCMD_USER" "$STEAMCMD_PASSWORD" "$STEAMCMD_AUTH_CODE" \
+  +app_update "$STEAMCMD_APP" $VALIDATE_FLAG \
   +quit
 fi
 
